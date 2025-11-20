@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOPAMINE HIJACK | Break the Loop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Glitch Effect */
+        .glitch-wrapper {
+            position: relative;
+        }
+        
+        .glitch {
+            position: relative;
+            color: white;
+            font-weight: 800;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            left: 2px;
+            text-shadow: -1px 0 #00ff00;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        
+        .glitch::after {
+            left: -2px;
+            text-shadow: -1px 0 #ff00ff;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        
+        @keyframes glitch-anim {
+            0% { clip: rect(13px, 9999px, 31px, 0); }
+            20% { clip: rect(89px, 9999px, 42px, 0); }
+            40% { clip: rect(2px, 9999px, 120px, 0); }
+            60% { clip: rect(34px, 9999px, 67px, 0); }
+            80% { clip: rect(67px, 9999px, 2px, 0); }
+            100% { clip: rect(12px, 9999px, 88px, 0); }
+        }
+        
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            20% { clip: rect(23px, 9999px, 5px, 0); }
+            40% { clip: rect(121px, 9999px, 34px, 0); }
+            60% { clip: rect(45px, 9999px, 56px, 0); }
+            80% { clip: rect(89px, 9999px, 12px, 0); }
+            100% { clip: rect(3px, 9999px, 67px, 0); }
+        }
+
+        /* Slot Machine Animation */
+        .slot-reel {
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .spinning {
+            animation: slotSpin 0.1s infinite linear;
+        }
+        @keyframes slotSpin {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+
+        /* SVG Icons */
+        .icon {
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00ff00;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- Navigation Bar -->
+        <nav class="fixed top-0 w-full bg-black/90 backdrop-blur-md border-b border-green-900/30 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center gap-2">
+                        <svg class="icon w-6 h-6 text-green-500" viewBox="0 0 24 24"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z" /><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" /></svg>
+                        <span class="font-mono font-bold text-xl text-white tracking-tighter">DOPAMINE<span class="text-green-500">HIJACK</span></span>
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-8">
+                            <a href="#simulation" class="text-gray-300 hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">The Simulation</a>
+                            <a href="#science" class="text-gray-300 hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">The Data</a>
+                            <a href="#memorandum" class="text-gray-300 hover:text-green-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">Memorandum</a>
+                            <a href="#petition" class="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded font-bold transition-all transform hover:scale-105">Sign Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            <!-- Hero Section -->
+            <div class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+                <div class="absolute inset-0 z-0">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-green-900/20 via-black to-black"></div>
+                    <div class="grid grid-cols-12 h-full opacity-10">
+                        <!-- Grid lines for background aesthetic -->
+                        <div class="border border-green-500/20"></div><div class="border border-green-500/20"></div><div class="border border-green-500/20"></div>
+                        <div class="border border-green-500/20"></div><div class="border border-green-500/20"></div><div class="border border-green-500/20"></div>
+                        <div class="border border-green-500/20"></div><div class="border border-green-500/20"></div><div class="border border-green-500/20"></div>
+                        <div class="border border-green-500/20"></div><div class="border border-green-500/20"></div><div class="border border-green-500/20"></div>
+                    </div>
+                </div>
+                
+                <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
+                    <div class="inline-block mb-4 px-4 py-1 rounded-full border border-green-500/50 bg-green-900/20 text-green-400 text-sm font-mono">
+                        PROJECT: RECLAIM YOUR BRAIN
+                    </div>
+                    <div class="glitch-wrapper mb-6">
+                        <h1 class="glitch text-5xl md:text-8xl font-bold tracking-tighter" data-text="YOU ARE NOT">YOU ARE NOT</h1>
+                        <h1 class="glitch text-5xl md:text-8xl font-bold tracking-tighter text-green-500" data-text="IN CONTROL">IN CONTROL</h1>
+                    </div>
+                    <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        Social media isn't designed for connection. It's designed for <span class="text-white font-bold">addiction</span>. 
+                        Algorithms exploit your brain's vulnerability to "Variable Reward Schedules"—the same mechanism used in slot machines.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="#simulation" class="group relative px-8 py-4 bg-white text-black font-bold text-lg rounded hover:bg-green-400 transition-all overflow-hidden">
+                            <span class="relative z-10 flex items-center gap-2">
+                                Start Simulation 
+                                <svg class="icon w-5 h-5" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg>
+                            </span>
+                        </a>
+                        <a href="#memorandum" class="px-8 py-4 border border-gray-600 text-gray-300 font-bold text-lg rounded hover:border-green-500 hover:text-green-500 transition-all">
+                            Read The Document
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation Section -->
+            <section id="simulation" class="py-20 bg-neutral-900 border-y border-neutral-800">
+                <div class="max-w-5xl mx-auto px-4">
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-4 text-white flex items-center gap-2">
+                                <svg class="icon w-6 h-6 text-green-500" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></svg> The Dopamine Loop
+                            </h2>
+                            <p class="text-gray-400 mb-6">
+                                This is exactly how your phone works. You pull to refresh (the trigger), you wait (the anticipation), and you get a random result (the variable reward).
+                            </p>
+                            <div class="bg-black p-6 rounded-xl border border-gray-800 shadow-2xl">
+                                <div id="slot-container" class="flex justify-center gap-4 mb-8 bg-gray-900 p-4 rounded-lg inner-shadow">
+                                    <div class="w-20 h-24 bg-white text-black text-5xl flex items-center justify-center rounded font-bold slot-reel" id="reel-1">?</div>
+                                    <div class="w-20 h-24 bg-white text-black text-5xl flex items-center justify-center rounded font-bold slot-reel" id="reel-2">?</div>
+                                    <div class="w-20 h-24 bg-white text-black text-5xl flex items-center justify-center rounded font-bold slot-reel" id="reel-3">?</div>
+                                </div>
+                                <div class="text-center mb-6 h-8">
+                                    <p id="message" class="font-mono text-sm text-green-400">Pull to refresh feed...</p>
+                                </div>
+                                <button 
+                                    id="spin-button"
+                                    class="w-full py-4 rounded-lg font-bold text-lg transition-all bg-green-600 hover:bg-green-500 text-black shadow-[0_0_20px_rgba(0,255,0,0.3)]"
+                                >
+                                    PULL TO REFRESH FEED
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-900/50 p-6 rounded-xl border border-gray-800">
+                            <h3 class="text-xl font-mono font-bold mb-4 text-green-400 flex gap-2 items-center">
+                                <svg class="icon w-5 h-5" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12" /></svg> Brain Activity Monitor
+                            </h3>
+                            
+                            <div class="mb-2 flex justify-between text-xs text-gray-400">
+                                <span>Withdrawal</span>
+                                <span>Baseline</span>
+                                <span>High</span>
+                            </div>
+                            <div class="w-full h-6 bg-gray-800 rounded-full overflow-hidden mb-6 relative">
+                                <div 
+                                    id="dopamine-bar"
+                                    class="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 transition-all duration-700 ease-out"
+                                    style="width: 50%;"
+                                ></div>
+                                <div class="absolute top-0 bottom-0 w-1 bg-white opacity-50 left-1/2"></div>
+                            </div>
+
+                            <h4 class="text-sm font-bold text-gray-300 mb-2">Dopamine History (Last 10 Spins)</h4>
+                            <div id="history-container" class="flex items-end gap-1 h-32 border-b border-gray-700 pb-2">
+                                <div class="w-full text-center self-center text-gray-600 text-sm">No data recorded...</div>
+                            </div>
+                            <div class="mt-4 p-4 bg-red-900/20 border border-red-900/50 rounded text-sm text-red-200">
+                                <strong class="block mb-1">
+                                    <svg class="icon w-4 h-4 inline-block align-text-bottom" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg> DANGER:
+                                </strong>
+                                The "dip" after a bad scroll triggers <span class="underline">cortisol</span> (stress). Your brain forces you to scroll again to fix the stress. You are trapped.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Info Section -->
+            <section id="science" class="py-20 bg-black">
+                <div class="max-w-4xl mx-auto px-4">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-5xl font-bold mb-4">THE <span class="text-green-500">DATA</span></h2>
+                        <p class="text-gray-400">Why willpower isn't enough against a supercomputer.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-8 mb-16">
+                        <div class="p-6 border border-gray-800 rounded-lg bg-neutral-900 hover:border-green-500 transition-colors">
+                            <h3 class="text-4xl font-bold text-white mb-2">97%</h3>
+                            <p class="text-sm text-gray-400 uppercase tracking-widest mb-4">of Teenagers</p>
+                            <p class="text-gray-300 text-sm">Use at least one major social media platform daily, exposing developing brains to algorithmic manipulation.</p>
+                        </div>
+                        <div class="p-6 border border-gray-800 rounded-lg bg-neutral-900 hover:border-green-500 transition-colors">
+                            <h3 class="text-4xl font-bold text-red-500 mb-2">+13%</h3>
+                            <p class="text-sm text-gray-400 uppercase tracking-widest mb-4">Depression Risk</p>
+                            <p class="text-gray-300 text-sm">Increase in depressive symptoms for every additional hour spent on social media per day.</p>
+                        </div>
+                        <div class="p-6 border border-gray-800 rounded-lg bg-neutral-900 hover:border-green-500 transition-colors">
+                            <h3 class="text-4xl font-bold text-green-500 mb-2">1/3</h3>
+                            <p class="text-sm text-gray-400 uppercase tracking-widest mb-4">Users are Youth</p>
+                            <p class="text-gray-300 text-sm">Adolescents make up a massive portion of the user base, often targeted by "growth" metrics.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-900 rounded-2xl p-8 border border-gray-800">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <svg class="icon w-5 h-5 text-green-500" viewBox="0 0 24 24"><path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17V14" /></svg> Natural vs. Artificial Rewards
+                        </h3>
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex justify-between text-sm text-gray-300 mb-2">
+                                    <span>Eating a good meal</span>
+                                    <span>~50% increase</span>
+                                </div>
+                                <div class="w-full bg-gray-800 h-4 rounded-full">
+                                    <div class="bg-blue-500 h-4 rounded-full" style="width: 50%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm text-gray-300 mb-2">
+                                    <span>Video Games / Social Viral</span>
+                                    <span>~100% increase</span>
+                                </div>
+                                <div class="w-full bg-gray-800 h-4 rounded-full">
+                                    <div class="bg-green-500 h-4 rounded-full" style="width: 80%;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm text-gray-300 mb-2">
+                                    <span>Substance Abuse</span>
+                                    <span>~150%+ increase</span>
+                                </div>
+                                <div class="w-full bg-gray-800 h-4 rounded-full">
+                                    <div class="bg-red-600 h-4 rounded-full" style="width: 95%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-6 text-xs text-gray-500 italic text-center">
+                            Source: Meta-analysis on neurophysiological impact of digital media (PMC 2025).
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Memorandum Section -->
+            <section id="memorandum" class="py-20 bg-white text-black relative">
+                <div class="max-w-4xl mx-auto px-6 md:px-12 py-12 border-2 border-black shadow-[10px_10px_0px_0px_rgba(0,0,0,1)] bg-[#f0f0f0]">
+                    <div class="text-center border-b-2 border-black pb-6 mb-8">
+                        <h2 class="text-3xl font-serif font-bold uppercase mb-2">Memorandum of Understanding</h2>
+                        <p class="text-sm font-mono">SUBJECT: Regulation of Algorithmic Content Feeds for Youth Protection</p>
+                        <p class="text-sm font-mono">TO: School Boards, Policy Makers, & Technology Regulators</p>
+                    </div>
+
+                    <div class="prose max-w-none font-serif">
+                        <h3 class="font-bold uppercase text-lg border-b border-black inline-block mb-4">1. The Grievance</h3>
+                        <p class="mb-4">
+                            WHEREAS, social media platforms utilize "Variable Reward Schedules" designed to maximize time-on-device at the expense of user mental health; AND WHEREAS, the current lack of transparency regarding these algorithms prevents youth from exercising cognitive liberty.
+                        </p>
+
+                        <h3 class="font-bold uppercase text-lg border-b border-black inline-block mb-4">2. The Proposal (Control, Not Ban)</h3>
+                        <p class="mb-4">
+                            We, the undersigned, do not call for the banning of technology, but for the <strong>regulation of its hidden mechanics</strong>. We demand the following:
+                        </p>
+                        <ul class="list-disc pl-6 mb-6 space-y-2">
+                            <li><strong>Algorithmic Transparency:</strong> Platforms must disclose when they are optimizing for "Engagement Time" versus "Relevance."</li>
+                            <li><strong>Mandatory Stopping Cues:</strong> Infinite scroll features must be disabled by default for users under $18$, replaced by "Page" loads to allow cognitive breaks.</li>
+                            <li><strong>Chronological Feeds:</strong> Users must have the right to a default chronological feed free from behavioral prediction models.</li>
+                            <li><strong>Data Sovereignty:</strong> Complete ownership of our behavioral data and the right to delete our "Digital Dopamine Profile."</li>
+                        </ul>
+
+                        <h3 class="font-bold uppercase text-lg border-b border-black inline-block mb-4">3. Conclusion</h3>
+                        <p>
+                            We reclaim our attention. We assert our right to exist offline without withdrawal. We demand a digital environment that serves humanity, not hijacks it.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-12 flex justify-end">
+                        <div class="border-t-2 border-black w-64 pt-2 text-center">
+                            <p class="font-serif italic">Voice of the Youth</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Petition Section -->
+            <section id="petition" class="py-20 bg-green-900 relative overflow-hidden">
+                <div class="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9IiNmZmYiLz48L252Zy4=')]"></div>
+                
+                <div class="max-w-xl mx-auto px-4 relative z-10">
+                    <div class="bg-black p-8 rounded-2xl shadow-2xl border border-green-500/30">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold text-white mb-2">JOIN THE MOVEMENT</h2>
+                            <p id="signature-count" class="text-green-400 font-mono">14,203 signatures collected</p>
+                        </div>
+
+                        <!-- Hidden iframe to capture the Google Form response without redirecting page -->
+                        <iframe 
+                            name="hidden_iframe_petition" 
+                            id="hidden_iframe_petition" 
+                            style="display: none;" 
+                            onload="if(window.submittedForm) showSuccessMessage();"
+                        ></iframe>
+
+                        <div id="form-container">
+                            <form 
+                                id="petition-form"
+                                action="" 
+                                method="POST" 
+                                target="hidden_iframe_petition"
+                                class="space-y-6"
+                            >
+                                <div>
+                                    <label for="name" class="block text-sm font-medium text-gray-400 mb-1">Name / Alias</label>
+                                    <input 
+                                        required 
+                                        type="text" 
+                                        id="name"
+                                        name="NAME_ENTRY_ID_PLACEHOLDER"
+                                        class="w-full bg-gray-900 border border-gray-700 rounded p-3 text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-all"
+                                        placeholder="Jane Doe"
+                                    />
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-400 mb-1">Email</label>
+                                    <input 
+                                        required 
+                                        type="email" 
+                                        id="email"
+                                        name="EMAIL_ENTRY_ID_PLACEHOLDER"
+                                        class="w-full bg-gray-900 border border-gray-700 rounded p-3 text-white focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none transition-all"
+                                        placeholder="jane@example.com"
+                                    />
+                                </div>
+                                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+                                    <svg class="icon w-5 h-5" viewBox="0 0 24 24"><path d="m12 19 7-7 3 3-7 7-3-3z" /><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z" /><path d="m2 2 7.586 7.586" /><circle cx="11" cy="11" r="2" /></svg> SIGN THE MEMORANDUM
+                                </button>
+                                <p class="text-xs text-gray-500 text-center">
+                                    Your data is private. We only count your voice.
+                                </p>
+                            </form>
+                        </div>
+                        
+                        <div id="success-message" class="text-center py-10 hidden">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-full text-green-500 mb-4">
+                                <svg class="icon w-8 h-8" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Signed Successfully.</h3>
+                            <p class="text-gray-400">Thank you for reclaiming your attention.</p>
+                            <div class="mt-6 pt-6 border-t border-gray-800">
+                                <p class="text-sm text-gray-500 mb-4">Share this project:</p>
+                                <div class="flex justify-center gap-4">
+                                    <button onclick="copyToClipboard('dopamine_hijack_pure.html')" class="p-2 bg-gray-800 rounded hover:bg-gray-700 text-white text-xs">Copy Link</button>
+                                    <button class="p-2 bg-gray-800 rounded hover:bg-gray-700 text-white text-xs">Share on X</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="bg-black py-12 border-t border-gray-900">
+                <div class="max-w-7xl mx-auto px-4 text-center">
+                    <div class="flex items-center justify-center gap-2 mb-4">
+                        <svg class="icon w-6 h-6 text-green-800" viewBox="0 0 24 24"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z" /><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" /></svg>
+                        <span class="font-mono font-bold text-xl text-gray-700">DOPAMINE<span class="text-green-900">HIJACK</span></span>
+                    </div>
+                    <p class="text-gray-600 text-sm max-w-md mx-auto">
+                        This is an educational project raising awareness about the psychological impacts of social media algorithms.
+                    </p>
+                    <div class="mt-8 flex justify-center gap-6 text-sm text-gray-600">
+                        <a href="#" class="hover:text-white">Privacy Policy</a>
+                        <a href="#" class="hover:text-white">Sources</a>
+                        <a href="#" class="hover:text-white">Contact</a>
+                    </div>
+                    <p class="mt-8 text-xs text-gray-800">
+                        &copy; 2025 Project Dopamine Hijack. All rights reserved.
+                    </p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // --- CONFIGURATION (!!! CRITICAL: ONLY REPLACE THE TEXT INSIDE THE QUOTES !!!) ---
+        
+        // 1. The Google Form Action URL (must start with https://docs.google.com/forms/...)
+        // Extracted from the provided URL, modified for submission endpoint.
+        const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSd5uB8MlcVknhVXzkKPE32-KV_fvf1w8Fpdc93zFB9LPeQz_Q/formResponse"; 
+        
+        // 2. The Entry ID for the Name field (from '&entry.1055701760=TEST_NAME')
+        const NAME_ENTRY_ID = "1055701760"; 
+        
+        // 3. The Entry ID for the Email field (from '&entry.1370023675=TEST_EMAIL')
+        const EMAIL_ENTRY_ID = "1370023675"; 
+        // -------------------------------------------------------
+
+        // Global state for the simulation
+        let dopamineLevel = 50;
+        let isSpinning = false;
+        let history = [];
+        const icons = ["❤️", "👍", "🔥", "👎", "💩", "👻", "💎"];
+        let signatureCount = 14203;
+
+        // Utility function to update the DOM safely
+        const $ = (id) => document.getElementById(id);
+
+        // --- SIMULATION LOGIC ---
+
+        function updateDopamineBar() {
+            const bar = $('dopamine-bar');
+            bar.style.width = `${dopamineLevel}%`;
+        }
+
+        function updateHistory() {
+            const container = $('history-container');
+            container.innerHTML = '';
+            
+            if (history.length === 0) {
+                 container.innerHTML = '<div class="w-full text-center self-center text-gray-600 text-sm">No data recorded...</div>';
+                 return;
+            }
+
+            // Keep only the last 10 entries
+            const displayHistory = history.slice(-10);
+
+            displayHistory.forEach((val, idx) => {
+                const bar = document.createElement('div');
+                bar.className = `flex-1 rounded-t transition-all duration-500`;
+                bar.style.height = `${Math.abs(val) * 3}%`;
+                bar.style.opacity = (idx + 1) / displayHistory.length;
+                bar.style.backgroundColor = val > 0 ? '#10B981' : '#EF4444'; // green-500 or red-500
+                container.appendChild(bar);
+            });
+        }
+
+        function spin() {
+            if (isSpinning) return;
+            isSpinning = true;
+            $('spin-button').disabled = true;
+            $('spin-button').textContent = "REFRESHING...";
+            $('spin-button').classList.replace('bg-green-600', 'bg-gray-700');
+            $('spin-button').classList.replace('text-black', 'text-gray-500');
+            $('spin-button').classList.remove('shadow-[0_0_20px_rgba(0,255,0,0.3)]');
+            
+            $('message').textContent = "Checking algorithm...";
+            $('message').classList.replace('text-green-400', 'text-yellow-400');
+
+            const reels = [$('reel-1'), $('reel-2'), $('reel-3')];
+            reels.forEach(r => r.classList.add('spinning'));
+
+            // Simulate spinning
+            const interval = setInterval(() => {
+                reels.forEach(r => r.textContent = icons[Math.floor(Math.random() * icons.length)]);
+            }, 100);
+
+            setTimeout(() => {
+                clearInterval(interval);
+                reels.forEach(r => r.classList.remove('spinning'));
+                isSpinning = false;
+                
+                const outcome = Math.random();
+                let newReels = [];
+                let dopaChange = 0;
+                let msg = "";
+                
+                if (outcome > 0.8) {
+                    // Jackpot / Viral
+                    newReels = ["🔥", "🔥", "🔥"];
+                    dopaChange = 30;
+                    msg = "VIRAL HIT! Massive Dopamine Spike! You feel amazing!";
+                } else if (outcome > 0.4) {
+                    // Small Reward
+                    newReels = ["❤️", "❤️", "👍"];
+                    dopaChange = 10;
+                    msg = "A few likes. It's okay, but you want more.";
+                } else {
+                    // Disappointment / Craving
+                    newReels = ["💩", "👎", "👻"];
+                    dopaChange = -15;
+                    msg = "No notifications. The craving creates anxiety.";
+                }
+                
+                reels.forEach((r, i) => r.textContent = newReels[i]);
+                dopamineLevel = Math.min(100, Math.max(0, dopamineLevel + dopaChange));
+                history.push(dopaChange);
+                
+                $('message').textContent = msg;
+                $('message').classList.replace('text-yellow-400', 'text-green-400');
+                
+                $('spin-button').disabled = false;
+                $('spin-button').textContent = "PULL TO REFRESH FEED";
+                $('spin-button').classList.replace('bg-gray-700', 'bg-green-600');
+                $('spin-button').classList.replace('text-gray-500', 'text-black');
+                $('spin-button').classList.add('shadow-[0_0_20px_rgba(0,255,0,0.3)]');
+
+                updateDopamineBar();
+                updateHistory();
+                
+            }, 2000);
+        }
+
+        // --- GOOGLE FORMS SUBMISSION LOGIC ---
+
+        // Function to show the success message and hide the form
+        function showSuccessMessage() {
+            window.submittedForm = true;
+            $('form-container').style.display = 'none';
+            $('success-message').style.display = 'block';
+            
+            // Increment the visible count
+            signatureCount += 1;
+            $('signature-count').textContent = signatureCount.toLocaleString() + ' signatures collected';
+        }
+
+        // Main initialization function
+        window.onload = function() {
+            // 1. Initialize the simulation button
+            $('spin-button').addEventListener('click', spin);
+
+            // 2. Configure the Google Forms elements
+            const form = $('petition-form');
+            const nameInput = $('name');
+            const emailInput = $('email');
+            
+            try {
+                // Set the dynamic action URL
+                form.action = GOOGLE_FORM_ACTION_URL;
+
+                // Set the dynamic input names
+                nameInput.name = `entry.${NAME_ENTRY_ID}`;
+                emailInput.name = `entry.${EMAIL_ENTRY_ID}`;
+
+                // Set up a custom submit handler
+                form.addEventListener('submit', function(event) {
+                    // We prevent the default submit to ensure our custom logic runs first,
+                    // then manually submit the form after updating our UI state.
+                    event.preventDefault(); 
+                    
+                    // Set a flag before submission so the iframe knows it was successful
+                    window.submittedForm = true; 
+                    
+                    // The form will now submit to the hidden iframe
+                    form.submit();
+                });
+            } catch (error) {
+                 // Catch runtime errors if the config variables are somehow invalid
+                 console.error("Form Configuration Runtime Error:", error);
+                 // Inform user if configuration failed
+                 $('message').textContent = "ERROR: Form configuration failed. Check console for details.";
+                 $('message').classList.replace('text-green-400', 'text-red-500');
+            }
+            
+            // Utility for sharing link
+            window.copyToClipboard = function(text) {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    const button = event.target;
+                    const originalText = button.textContent;
+                    button.textContent = "Copied!";
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                    }, 1500);
+                }).catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+            }
+        };
+
+        // Initialize display on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDopamineBar();
+            updateHistory();
+            $('signature-count').textContent = signatureCount.toLocaleString() + ' signatures collected';
+        });
+    </script>
+</body>
+</html>
